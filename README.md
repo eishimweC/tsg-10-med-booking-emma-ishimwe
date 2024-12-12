@@ -1,1 +1,1 @@
-medical-booking
+Appointment Booking Project
