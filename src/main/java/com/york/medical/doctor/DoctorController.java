@@ -4,6 +4,7 @@ import com.york.medical.appointment.AppointmentRepository;
 import com.york.medical.specialization.SpecializationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,17 +15,19 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
-
-    @Autowired
     public DoctorController(DoctorService doctorService) {
         this.doctorService = doctorService;
 
     }
-
     // Endpoint to fetch all the doctors
     @GetMapping
     public List<Doctor> findAllDoctors(){
         return doctorService.findAllDoctors();
+    }
+
+    @GetMapping(path = "/{id}")
+    public Doctor findADoctorById(@PathVariable Long id) {
+        return doctorService.findDoctorById(id);
     }
 
     @GetMapping("/specialization")
@@ -33,21 +36,21 @@ public class DoctorController {
     }
 
     @PostMapping("/create")
+    //@PreAuthorize("hasRole('Admin')")
     public Doctor createNewDoctor(@RequestBody DoctorDTO doctorDTO) {
         return this.doctorService.createNewDoctor(doctorDTO);
     }
 
     @DeleteMapping("/del/{id}")
+    //@PreAuthorize("hasRole('Admin')")
     public void deleteDoctor(@PathVariable Long id) {
         doctorService.deleteDoctor(id);
     }
 
     // Endpoint to update a doctor
-//    @PutMapping(path = "/{id}")
-//    public ResponseEntity<?> updateDoctor(@PathVariable Long id, @RequestBody Doctor doctor) {
-//        // Set the ID from the path variable to the doctor object
-//        doctor.setId(id);
-//        // Delegate the update logic to the service layer
-//        return doctorService.updateDoctor(doctor);
-//    }
+    @PutMapping(path = "/{id}")
+    //@PreAuthorize("hasRole('Admin')")
+    public Doctor updateDoctor(@PathVariable Long id, @RequestBody DoctorDTO doctorDTO) {
+        return doctorService.updateDoctor(id, doctorDTO);
+    }
 }

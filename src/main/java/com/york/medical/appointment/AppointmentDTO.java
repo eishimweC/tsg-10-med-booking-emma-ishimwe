@@ -8,6 +8,7 @@ public class AppointmentDTO {
     private Long doctorId;
     private LocalDateTime appointmentDateTime;
     private VisitType visitType;
+    private AppointmentStatus appointmentStatus;
 
     public Long getPatientId() {
         return patientId;
@@ -40,4 +41,12 @@ public class AppointmentDTO {
     public void setVisitType(VisitType visitType) {
         this.visitType = visitType;
     }
+
+    public AppointmentStatus getAppointmentStatus() {
+        return appointmentStatus;
+    }
+    public void setAppointmentStatus(AppointmentStatus appointmentStatus) {
+        this.appointmentStatus = appointmentStatus;
+    }
+
 }

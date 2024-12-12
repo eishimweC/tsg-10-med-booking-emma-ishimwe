@@ -20,16 +20,16 @@ public class SecurityConfig {
                         "/api/logout","/api/**", "/error")
                 .permitAll()
                 .anyRequest().authenticated());
-//        http.csrf((csrf) -> csrf
-//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//                        // https://stackoverflow.com/a/74521360/65681
-//                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-//                // .ignoringRequestMatchers("/appointments/new") //permits public access for
-//                // POST, PUT, DELETE requests (not requiring csrf token)
-//        );
+        http.csrf((csrf) -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        // https://stackoverflow.com/a/74521360/65681
+                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+                 .ignoringRequestMatchers("/api/appointments/**", "/api/**") //permits public access for
+                // POST, PUT, DELETE requests (not requiring csrf token)
+        );
 
-        http.csrf((csrf) -> csrf.disable());
-        //http.addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class);
+        //http.csrf((csrf) -> csrf.disable());
+        http.addFilterAfter(new CookieCsrfFilter(), BasicAuthenticationFilter.class);
         http.oauth2Login(oauth2 -> oauth2
                 .defaultSuccessUrl("/", true) // Redirect to frontend after success
         );

@@ -31,7 +31,7 @@ public class Appointment {
     private Patient patient;
 
     @Enumerated(EnumType.STRING)
-    private AppointmentStatus appointmentStatus = AppointmentStatus.CONFIRMED; //PENDING CONFIRMED OR CANCELLED
+    private AppointmentStatus appointmentStatus; //PENDING CONFIRMED OR CANCELLED
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

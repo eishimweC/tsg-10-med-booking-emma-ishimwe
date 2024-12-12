@@ -121,11 +121,10 @@ public class AppointmentService {
             existingAppointment.setVisitType(appointmentDTO.getVisitType());
         }
 
-        // Update appointment status (optional)
-//        if (appointmentDTO.getAppointmentStatus() != null) {
-//            existingAppointment.setAppointmentStatus(appointmentDTO.getAppointmentStatus());
-//        }
-        existingAppointment.setAppointmentStatus(AppointmentStatus.CONFIRMED);
+        // Update appointment status
+        if (appointmentDTO.getAppointmentStatus() != null) {
+            existingAppointment.setAppointmentStatus(appointmentDTO.getAppointmentStatus());
+        }
 
         // Save updated appointment
         return appointmentRepository.save(existingAppointment);

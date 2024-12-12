@@ -46,6 +46,9 @@ public class AuthController {
     // Route to provide user data to the frontend - useful to manage role-based access for react-router-dom routes
     @GetMapping("/api/user")
     public ResponseEntity<?> getUser(@AuthenticationPrincipal OAuth2User user) {
+        if (user == null) {
+            return ResponseEntity.ok().body("");
+        }
         return ResponseEntity.ok(user.getAttributes());
     }
 
