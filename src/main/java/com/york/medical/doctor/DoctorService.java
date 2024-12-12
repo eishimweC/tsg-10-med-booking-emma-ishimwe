@@ -4,6 +4,7 @@ import com.york.medical.appointment.Appointment;
 import com.york.medical.appointment.AppointmentRepository;
 import com.york.medical.specialization.Specialization;
 import com.york.medical.specialization.SpecializationRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +17,11 @@ import java.util.Optional;
 @Service
 public class DoctorService {
 
+    // Dependencies injected via constructor
     private final DoctorRepository doctorRepository;
     private final SpecializationRepository specializationRepository;
     private final AppointmentRepository appointmentRepository;
 
-    @Autowired
     public DoctorService(DoctorRepository doctorRepository, SpecializationRepository specializationRepository, AppointmentRepository appointmentRepository) {
         this.doctorRepository = doctorRepository;
         this.specializationRepository = specializationRepository;
@@ -30,6 +31,11 @@ public class DoctorService {
     // Method to fetch all the doctors
     public List<Doctor> findAllDoctors() {
         return doctorRepository.findAll();
+    }
+
+    public Doctor findDoctorById(Long id) {
+        return doctorRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found"));
     }
 
     public List<Doctor> findDoctorsBySpecializationId(Long specializationId) {
@@ -57,38 +63,33 @@ public class DoctorService {
     }
 
     // Update Doctor
-//    public ResponseEntity<?> updateDoctor(Doctor doctor) {
-//        if (doctor.getId() == null) {
-//            return new ResponseEntity<>("Doctor ID cannot be null !", HttpStatus.BAD_REQUEST);
-//        }
-//
-//        Optional<Doctor> optionalDoctor = doctorRepository.findById(doctor.getId());
-//
-//        // Get the existing doctor entity
-//        Doctor existingDoctor = optionalDoctor.get();
-//
-//        // Update the first name if provided
-//        if (doctor.getFirstName() != null) {
-//            existingDoctor.setFirstName(doctor.getFirstName());
-//        }
-//
-//        // Update the last name if provided
-//        if (doctor.getLastName() != null) {
-//            existingDoctor.setLastName(doctor.getLastName());
-//        }
-//        // update specialization if provided
-//        if (doctor.getSpecialization() != null && doctor.getSpecialization().getName() != null) {
-//            Optional <Specialization> optionalSpecialization = specializationRepository.findByName(doctor.getSpecialization().getName());
-//            if (optionalSpecialization.isEmpty()) {
-//                return new ResponseEntity<>("Specialization with name '" + doctor.getSpecialization().getName() + "' not found!", HttpStatus.NOT_FOUND);
-//            }
-//            existingDoctor.setSpecialization(optionalSpecialization.get());
-//        }
-//        // Save the updated doctor
-//        Doctor updatedDoctor = doctorRepository.save(existingDoctor);
-//
-//        return new ResponseEntity<>(updatedDoctor, HttpStatus.OK);
-//    }
+    @Transactional
+    public Doctor updateDoctor(Long id, DoctorDTO doctorDTO) {
+        // Find the existing doctor by ID
+        Doctor existingDoctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found"));
+
+        // Update fields if they are provided in the DTO
+        if (doctorDTO.getFirstName() != null && !doctorDTO.getFirstName().isBlank()) {
+            existingDoctor.setFirstName(doctorDTO.getFirstName());
+        }
+
+        if (doctorDTO.getLastName() != null && !doctorDTO.getLastName().isBlank()) {
+            existingDoctor.setLastName(doctorDTO.getLastName());
+        }
+
+        if (doctorDTO.getSpecializationId() != null) {
+            // Find the specialization by ID
+            Specialization specialization = specializationRepository.findById(doctorDTO.getSpecializationId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Specialization not found"));
+            existingDoctor.setSpecialization(specialization);
+        }
+
+        // Save the updated doctor
+         doctorRepository.save(existingDoctor);
+        return existingDoctor;
+    }
+
 
 
 }
