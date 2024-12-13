@@ -7,8 +7,11 @@ WORKDIR /app
 # Copy the Spring Boot jar file into the container
 COPY target/medical-0.0.1-SNAPSHOT.jar app.jar
 
-# Expose the port your Spring Boot app runs on
+# Ensure the jar file is executable
+RUN chmod +x /app/app.jar
+
+# Expose the port Spring Boot app runs on
 EXPOSE 8080
 
-# Run the Spring Boot application
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Run the application
+CMD ["java", "-jar", "/app.jar"]
