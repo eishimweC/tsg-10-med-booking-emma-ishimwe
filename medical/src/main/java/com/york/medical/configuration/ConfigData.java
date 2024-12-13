@@ -3,7 +3,6 @@ package com.york.medical.configuration;
 
 import com.york.medical.appointment.Appointment;
 import com.york.medical.appointment.AppointmentRepository;
-import com.york.medical.appointment.AppointmentStatus;
 import com.york.medical.appointment.VisitType;
 import com.york.medical.doctor.Doctor;
 import com.york.medical.doctor.DoctorRepository;
