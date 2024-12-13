@@ -23,6 +23,12 @@ services:
     ports:
       - "8080:8080"
     environment:
+      # Auth
+      OAUTH2_ISSUER: https://dev-25772036.okta.com/oauth2/default
+      OAUTH2_CLIENT_ID: 0oalqfr4mpc1ZTzrE5d7
+      OAUTH2_CLIENT_SECRET: ynn_gb8uklZT_Y6K2WqnqHYTFPX9QmHG_H-IkQXUIERUBZOnfi0-8gbMX5r8zBGc
+
+      # Database
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/medicaldb
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
@@ -37,10 +43,9 @@ services:
       dockerfile: Dockerfile
     container_name: react_frontend
     ports:
-      - "3000:80"
+      - "80:80"
     depends_on:
       - backend
 
 volumes:
   db_data:
-
