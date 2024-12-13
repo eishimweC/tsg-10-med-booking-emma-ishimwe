@@ -1,17 +1,16 @@
-
 -- Create the table for specializations
 CREATE TABLE specializations (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 );
--- Insert data into the specializations table
 INSERT INTO specializations (id, name) VALUES
     (1, 'Cardiology'),
     (2, 'Pediatrics'),
     (3, 'Dermatology'),
     (4, 'Orthopedics'),
     (5, 'Neurology');
-
+    
+-- Create the table for patients
 CREATE TABLE IF NOT EXISTS patients (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
