@@ -1,9 +1,11 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
+# PostgreSQL Database
   db:
-    image: postgres:latest
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
     container_name: postgres_db
     ports:
       - "5432:5432"
